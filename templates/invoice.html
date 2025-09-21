@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Energy Invoice</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      body {
+        font-size: 14px;
+        line-height: 1.5;
+        color: #333;
+        background-color: #f8f9fa;
+      }
+
+      .invoice-container {
+        width: 100%;
+        max-width: 750px;
+        padding: 25px;
+        background: #fff;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 6px;
+      }
+
+      /* header */
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        border-bottom: 2px solid #eb721c;
+        margin-bottom: 20px;
+      }
+
+      .company-info img {
+        height: 70px;
+        width: auto;
+      }
+
+      .company-info h1 {
+        font-size: 18px;
+        color: #eb721c;
+      }
+
+      .company-info p {
+        font-size: 13px;
+        font-weight: bold;
+      }
+
+      .invoice-title {
+        font-size: 20px;
+        font-weight: bold;
+        color: #2c3e50;
+      }
+
+      .invoice-details {
+        text-align: right;
+        font-size: 13px;
+      }
+
+      /* CUSTOMER */
+      .customer-info {
+        background-color: #f5f7fa;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        font-size: 13px;
+      }
+
+      .customer-info h3 {
+        font-size: 15px;
+        margin-bottom: 8px;
+        color: #2c3e50;
+      }
+
+      /* BILLING PERIOD */
+      .billing-period {
+        margin: 15px 0;
+        padding: 8px;
+        border-radius: 4px;
+        text-align: center;
+        font-size: 14px;
+      }
+
+      .highlight {
+        color: #eb721c;
+        font-weight: bold;
+      }
+
+      /* TABLE */
+      .summary-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 10px 0;
+        font-size: 13px;
+      }
+
+      .summary-table th {
+        background-color: #eb721c;
+        color: white;
+        padding: 5px;
+        text-align: left;
+      }
+
+      .summary-table td {
+        padding: 5px;
+        border-bottom: 1px solid #e9ecef;
+      }
+
+      .summary-table .tax-row td {
+        font-style: italic;
+        color: #555;
+      }
+
+      .summary-table .total-row td {
+        font-weight: bold;
+        background-color: #eb721c;
+        color: white;
+        font-size: 14px;
+      }
+
+      /* QR + TOTAL layout */
+      .total-section {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 30px;
+        margin: 30px 0;
+        padding: 20px;
+        background: #f8f9fa;
+        border-radius: 10px;
+      }
+
+      .payment-details {
+        text-align: center;
+      }
+
+      .qr-code {
+        background: white;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .qr-code img {
+        width: 150px;
+        height: 150px;
+        border: 1px solid #ddd;
+      }
+
+      .qr-code p {
+        margin-top: 10px;
+        font-size: 12px;
+        color: #666;
+      }
+
+      .bank-info h3 {
+        color: #eb721c;
+        margin-bottom: 15px;
+      }
+
+      .bank-details {
+        background: white;
+        padding: 15px;
+        border-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        justify-content: left;
+        align-items: left;
+      }
+
+      .bank-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        padding: 5px 0;
+        border-bottom: 1px solid #eee;
+      }
+
+      .bank-row:last-child {
+        border-bottom: none;
+      }
+
+      .bank-label {
+        font-weight: bold;
+        color: #eb721c;
+        min-width: 120px;
+      }
+
+      .bank-value {
+        text-align: right;
+        font-family: "Courier New", monospace;
+      }
+
+      .bank-value.amount {
+        font-weight: bold;
+        color: #eb721c;
+        font-size: 1.1em;
+      }
+
+      @media (max-width: 768px) {
+        .total-section {
+          grid-template-columns: 1fr;
+        }
+
+        .bank-row {
+          flex-direction: column;
+        }
+
+        .bank-value {
+          text-align: left;
+          margin-top: 2px;
+        }
+      }
+
+      /* FOOTER */
+      .footer {
+        margin-top: 30px;
+        text-align: center;
+        font-size: 12px;
+        color: #6c757d;
+        padding-top: 15px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="invoice-container">
+      <!-- HEADER -->
+      <div class="header">
+        <div class="company-info">
+          <img
+            src="https://static.wixstatic.com/media/ee4034_e2f1249a270347d088e2d262d425e28e~mv2.png"
+            alt="company_logo" />
+          <h1>Bisol Energija D.O.O</h1>
+          <p>Dunajska Cesta 167</p>
+          <p>Ljubljana, PC 1000</p>
+          <p>contact@energy.com</p>
+          <p>www.bisol-energija.si</p>
+        </div>
+        <div class="invoice-details">
+          <div class="invoice-title">INVOICE</div>
+          <p><strong>Invoice #:</strong> {{ invoice_number }}</p>
+          <p><strong>Period:</strong> {{ period_from }} - {{ period_to }}</p>
+          <p><strong>Measuring ID:</strong> 3423aBcsrTw4950</p>
+        </div>
+      </div>
+
+      <!-- CUSTOMER -->
+      <div class="customer-info">
+        <h3>Bill To:</h3>
+        <p><strong>Name:</strong> {{ customer_name }}</p>
+        <p><strong>ID:</strong> {{ customer_id }}</p>
+        <p>
+          <strong>City:</strong> {{ customer_city }} -
+          {{customer_postal_number}}
+        </p>
+        <p><strong>Address:</strong> {{ customer_address }}</p>
+        <p><strong>Contact:</strong> {{customer_email}} / {{customer_phone}}</p>
+      </div>
+
+      <!-- BILLING -->
+      <div class="billing-period">
+        Billing Period:
+        <span class="highlight">{{ period_from }}</span> to
+        <span class="highlight">{{ period_to }}</span>
+      </div>
+
+      <!-- TABLE -->
+      <table class="summary-table">
+        <thead>
+          <tr>
+            <th>Description</th>
+            <th>Consumption (kWh)</th>
+            <th>Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Energy Consumption</td>
+            <td>{{ total_consumption_kwh }} kWh</td>
+            <td>€{{ total_cost }}</td>
+          </tr>
+          <tr class="tax-row">
+            <td>Tax (20%)</td>
+            <td>—</td>
+            <td>€{{ (total_cost | float * 0.2) | round(2) }}</td>
+          </tr>
+          <tr class="total-row">
+            <td
+              colspan="2"
+              style="text-align: left">
+              Total Amount:
+            </td>
+            <td>€{{ (total_cost | float * 1.2) | round(2) }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- TOTAL + QR -->
+      <div class="total-section">
+        <div class="payment-details">
+          <h3>🔗 Quick pay via QR code</h3>
+          <div class="qr-code">
+            <img
+              src="https://pngimg.com/uploads/qr_code/small/qr_code_PNG7.png"
+              alt="QR kod za brzu uplatu" />
+            <p>Scan QR code with your Bank App and pay Quicker!</p>
+          </div>
+        </div>
+
+        <div class="bank-info">
+          <h3>🏦 Payment information</h3>
+          <div class="bank-details">
+            <div class="bank-row">
+              <span class="bank-label">Name:</span>
+              <span class="bank-value">BISOL ENERGIJA D.O.O.</span>
+            </div>
+            <div class="bank-row">
+              <span class="bank-label">Adress:</span>
+              <span class="bank-value">Ljubljana, Slovenia</span>
+            </div>
+            <div class="bank-row">
+              <span class="bank-label">IBAN:</span>
+              <span class="bank-value">SI56 2910 0000 1234 567</span>
+            </div>
+            <div class="bank-row">
+              <span class="bank-label">SWIFT/BIC:</span>
+              <span class="bank-value">BASXSI22</span>
+            </div>
+            <div class="bank-row">
+              <span class="bank-label">Model:</span>
+              <span class="bank-value">189</span>
+            </div>
+            <div class="bank-row">
+              <span class="bank-label">Poziv na broj:</span>
+              <span class="bank-value">96-993323-43221</span>
+            </div>
+            <div class="bank-row">
+              <span class="bank-label">Iznos:</span>
+              <span class="bank-value amount"
+                >€{{ (total_cost | float * 1.2) | round(2) }} EUR</span
+              >
+            </div>
+            <div class="bank-row">
+              <span class="bank-label">Description:</span>
+              <span class="bank-value">Electricity bill payment</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FOOTER -->
+      <div class="footer">
+        <p>
+          For questions, contact us at contact@energy.com or call: +386952435412
+        </p>
+        <p>Please make payment within 30 days.</p>
+      </div>
+    </div>
+  </body>
+</html>

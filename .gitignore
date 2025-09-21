@@ -1,0 +1,29 @@
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment
+.venv/
+env/
+venv/
+
+# Databases
+*.db
+*.sqlite3
+
+# Local config
+*.env
+.env.*
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# PDFs, invoices, exports
+*.pdf
+/export/
