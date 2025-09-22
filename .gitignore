@@ -14,8 +14,8 @@ venv/
 *.sqlite3
 
 # Local config
-*.env
-.env.*
+# *.env
+# .env.*
 
 # OS junk
 .DS_Store
